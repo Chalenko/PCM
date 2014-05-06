@@ -1,10 +1,40 @@
 #include "stdafx.h"
-#include "CilkCode.h"`
+#include "CilkCode.h"
+
+void ParallelCilkAdd(const double *A, const double *B, double *dst, const int w, const int h)
+{
+	dst[0:(w * h)] = A[0:(w * h)] + B[0:(w * h)];
+	/*
+	cilk_for(int i = 0; i < h; i++){
+		# pragma ivdep
+		# pragma simd
+		cilk_for(int j = 0; j < w; j++){
+			dst[i * w + j] = A[i * w + j] + B[i * w + j];
+		}
+	}
+	*/
+}
+
+void ParallelCilkAddEq(const double *A, double *dst, const int w, const int h)
+{
+	dst[0:(w * h)] += A[0:(w * h)];
+	/*
+	cilk_for(int i = 0; i < h; i++){
+		# pragma ivdep
+		# pragma simd
+		cilk_for(int j = 0; j < w; j++){
+			dst[i * w + j] = dst[i * w + j] + A[i * w + j];
+		}
+	}
+	*/
+}
 
 void ParallelCilkTranspose(const double* src, double* dst, const int w, const int h){
-	for (int i = 0; i < h; i++){
-        for (int j = 0; j < w; j++){
-            dst[i * w + j] = src[j * h + i];
+	//dst[0:(w * h)] = dst[0:(w * h)] + 1;
+	cilk_for (int i = 0; i < h; i++){
+        cilk_for (int j = 0; j < w; j++){
+            //dst[i * w + j] = src[j * h + i];
+			dst[i * w + j] = dst[i * w + j] + 1;
 		}
 	}
 }

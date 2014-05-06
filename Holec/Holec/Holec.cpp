@@ -3,8 +3,8 @@
 
 #include "stdafx.h"
 #include "ConsecCode.h"
-#include "OpenMPCode.h"
-//#include "CilkCode.h"
+//#include "OpenMPCode.h"
+#include "CilkCode.h"
 
 #define DELTA (0.001)
 
@@ -121,45 +121,48 @@ int main(int argc, char* argv[])
 	*/
 
     s = omp_get_wtime();
-	ConsecMMult(A, B, C, n, n, n);
+	//ConsecMMult(A, B, C, n, n, n);
     f = omp_get_wtime();
 	//Print(C, n, n);
     printf("Execution of consec mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	ConsecBlock1MMult(A, B, C, n, n, n, 1000);
+	//ConsecBlock1MMult(A, B, C, n, n, n, 1000);
     f = omp_get_wtime();
     printf("Execution of consec block 1 mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	ConsecBlock2MMult(A, B, C, n, n, n);
+	//ConsecBlock2MMult(A, B, C, n, n, n);
     f = omp_get_wtime();
     printf("Execution of consec block 2 mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	ConsecBlock3MMult(A, B, C, n, n, n);
+	//ConsecBlock3MMult(A, B, C, n, n, n);
     f = omp_get_wtime();
     printf("Execution of consec block 3 mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	ParallelOMPMMult(A, B, gC, n, n, n);
+	ParallelCilkTranspose(A, B, n, n);
     f = omp_get_wtime();
-    printf("Execution time of parallel omp: %lf\n", f-s);
+    printf("Execution time of transpose cilk: %lf\n", f-s);
+	ParallelCilkTranspose(B, C, n, n);
+	rez=CompareMatrix(A, C, n*n, DELTA);
+	printf("Compare: %i\n",rez);
 
 	s = omp_get_wtime();
-	ParallelOMPBlock1MMult(A, B, gC, n, n, n, 1000);
+	//ParallelCilkMMult(A, B, gC, n, n, n);
     f = omp_get_wtime();
-    printf("Execution time of block 1 parallel omp: %lf\n", f-s);
+    printf("Execution time of parallel cilk: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	ParallelOMPBlock2MMult(A, B, gC, n, n, n);
+	//ParallelCilkBlock1MMult(A, B, gC, n, n, n, 1000);
     f = omp_get_wtime();
-    printf("Execution time of block 2 parallel omp: %lf\n", f-s);
+    printf("Execution time of block 1 parallel cilk: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	ParallelOMPBlock3MMult(A, B, gC, n, n, n);
+	//ParallelCilklock2MMult(A, B, gC, n, n, n);
     f = omp_get_wtime();
-    printf("Execution time of block 3 parallel omp: %lf\n", f-s);
+    printf("Execution time of block 2 parallel cilk: %lf\n", f-s);
 
 	rez=CompareMatrix(gC, C, n*n, DELTA);
 	printf("Compare: %i\n",rez);

@@ -1,5 +1,5 @@
 #include "stdafx.h"
-#include "OpenMPCode.h"`
+#include "OpenMPCode.h"
 
 void ParallelOMPAdd(const double *A, const double *B, double *dst, const int w, const int h)
 {

@@ -14,6 +14,7 @@
 #include "stdlib.h"
 #include <assert.h>
 #include <iostream>
+#include "omp.h"
 
 using namespace std;
 
