@@ -124,42 +124,37 @@ int main(int argc, char* argv[])
 	//ConsecMMult(A, B, C, n, n, n);
     f = omp_get_wtime();
 	//Print(C, n, n);
-    printf("Execution of consec mlt: %lf\n", f-s);
+    printf("Execution time of consec mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
 	//ConsecBlock1MMult(A, B, C, n, n, n, 1000);
     f = omp_get_wtime();
-    printf("Execution of consec block 1 mlt: %lf\n", f-s);
+    printf("Execution time of consec block 1 mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	//ConsecBlock2MMult(A, B, C, n, n, n);
+	ConsecBlock2MMult(A, B, C, n, n, n);
     f = omp_get_wtime();
-    printf("Execution of consec block 2 mlt: %lf\n", f-s);
+    printf("Execution time of consec block 2 mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	//ConsecBlock3MMult(A, B, C, n, n, n);
+	ParallelOMPBlock1MMult(A, B, C, n, n, n, 1000);
     f = omp_get_wtime();
-    printf("Execution of consec block 3 mlt: %lf\n", f-s);
+    printf("Execution time of parallel omp block 1 mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	//ParallelOMPMMult(A, B, C, n, n, n);
+	ParallelOMPBlock2MMult(A, B, C, n, n, n);
     f = omp_get_wtime();
-    printf("Execution time of parallel omp: %lf\n", f-s);
+    printf("Execution time of parallel omp block 2 mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	//ParallelCilkMMult(A, B, C, n, n, n);
+	ParallelCilkBlock1MMult(A, B, C, n, n, n, 1000);
     f = omp_get_wtime();
-    printf("Execution time of parallel omp: %lf\n", f-s);
+    printf("Execution time of parallel cilk block 1 mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	//ParallelCilkBlock1MMult(A, B, gC, n, n, n, 1000);
+	ParallelCilkBlock2MMult(A, B, gC, n, n, n);
     f = omp_get_wtime();
-    printf("Execution time of block 1 parallel cilk: %lf\n", f-s);
-
-	s = omp_get_wtime();
-	//ParallelCilklock2MMult(A, B, gC, n, n, n);
-    f = omp_get_wtime();
-    printf("Execution time of block 2 parallel cilk: %lf\n", f-s);
+    printf("Execution time of parallel cilk block 2 mlt: %lf\n", f-s);
 
 	rez=CompareMatrix(gC, C, n*n, DELTA);
 	printf("Compare: %i\n",rez);

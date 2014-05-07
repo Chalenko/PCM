@@ -43,17 +43,31 @@ void ParallelCilkMMult(double* src1, double* src2, double* dst, const int src1h,
 	double* tr = new double [src1w * src2w];
 	ParallelCilkTranspose(src2, tr, src2w, src1w);
 	cilk_for (int i = 0; i < src1h; i++){
-		cilk_for (int j = 0; j < src2w; j++){
+		for (int j = 0; j < src2w; j++){
 			double *vec1, *vec2;
 			vec1 = &(src1[i*src1w]);
 			vec2 = &(tr[j*src1w]);
-			dst[i*src2w + j] = SclMlt(vec1, vec2, src1w);
+			dst[i * src2w + j] = SclMlt(vec1, vec2, src1w);
 		}
 	}
 	delete [] tr;
 }
 
 void ParallelCilk2MMult(double* src1, double* src2, double* dst, const int src1h, const int src1w, const int src2w){
+	double* tr = new double [src1w * src2w];
+	ParallelCilkTranspose(src2, tr, src2w, src1w);
+	cilk_for (int i = 0; i < src1h; i++){
+		cilk_for (int j = 0; j < src2w; j++){
+			double *vec1, *vec2;
+			vec1 = &(src1[i*src1w]);
+			vec2 = &(tr[j*src1w]);
+			dst[i * src2w + j] = SclMlt(vec1, vec2, src1w);
+		}
+	}
+	delete [] tr;
+}
+
+void ParallelCilk3MMult(double* src1, double* src2, double* dst, const int src1h, const int src1w, const int src2w){
 	double* tr = new double [src1w * src2w];
 	ParallelCilkTranspose(src2, tr, src2w, src1w);
 	cilk_for (int i = 0; i < src1h; i++){
@@ -100,18 +114,18 @@ void ParallelCilkBlock1MMult(double* src1, double* src2, double* dst, const int 
 		
 		{
 			cilk_for(int i = 0; i < blockSize; i++){
-				cilk_for(int j = 0; j < blockSize; j++){
+				for(int j = 0; j < blockSize; j++){
 					A00[i * blockSize + j] = src1[i * src1w + j];
 				}
-				cilk_for(int j = blockSize; j < src1w; j++){
+				for(int j = blockSize; j < src1w; j++){
 					A01[i * (src1w - blockSize) + (j - blockSize)] = src1[i * src1w + j];
 				}
 			}
 			cilk_for(int i = blockSize; i < src1h; i++){
-				cilk_for(int j = 0; j < blockSize; j++){
+				for(int j = 0; j < blockSize; j++){
 					A10[(i - blockSize) * blockSize + j] = src1[i * src1w + j];
 				}
-				cilk_for(int j = blockSize; j < src1w; j++){
+				for(int j = blockSize; j < src1w; j++){
 					A11[(i - blockSize) * (src1w - blockSize) + (j - blockSize)] = src1[i * src1w + j];
 				}
 			}
@@ -119,18 +133,18 @@ void ParallelCilkBlock1MMult(double* src1, double* src2, double* dst, const int 
 
 		{
 			cilk_for(int i = 0; i < blockSize; i++){
-				cilk_for(int j = 0; j < blockSize; j++){
+				for(int j = 0; j < blockSize; j++){
 					B00[i * blockSize + j] = src2[i * src2w + j];
 				}
-				cilk_for(int j = blockSize; j < src2w; j++){
+				for(int j = blockSize; j < src2w; j++){
 					B01[i * (src2w - blockSize) + (j - blockSize)] = src2[i * src2w + j];
 				}
 			}
 			cilk_for(int i = blockSize; i < src1w; i++){
-				cilk_for(int j = 0; j < blockSize; j++){
+				for(int j = 0; j < blockSize; j++){
 					B10[(i - blockSize) * blockSize + j] = src2[i * src2w + j];
 				}
-				cilk_for(int j = blockSize; j < src2w; j++){
+				for(int j = blockSize; j < src2w; j++){
 					B11[(i - blockSize) * (src2w - blockSize) + (j - blockSize)] = src2[i * src2w + j];
 				}
 			}
@@ -158,18 +172,18 @@ void ParallelCilkBlock1MMult(double* src1, double* src2, double* dst, const int 
 
 		{
 			cilk_for(int i = 0; i < blockSize; i++){
-				cilk_for(int j = 0; j < blockSize; j++){
+				for(int j = 0; j < blockSize; j++){
 					dst[i * src2w + j] = C00[i * blockSize + j];
 				}
-				cilk_for(int j = blockSize; j < src2w; j++){
+				for(int j = blockSize; j < src2w; j++){
 					dst[i * src2w + j] = C01[i * (src2w - blockSize) + (j - blockSize)];
 				}
 			}
 			cilk_for(int i = blockSize; i < src1h; i++){
-				cilk_for(int j = 0; j < blockSize; j++){
+				for(int j = 0; j < blockSize; j++){
 					dst[i * src2w + j] = C10[(i - blockSize) * blockSize + j];
 				}
-				cilk_for(int j = blockSize; j < src2w; j++){
+				for(int j = blockSize; j < src2w; j++){
 					dst[i * src2w + j] = C11[(i - blockSize) * (src2w - blockSize) + (j - blockSize)];
 				}
 			}
@@ -200,6 +214,45 @@ void ParallelCilkBlock1MMult(double* src1, double* src2, double* dst, const int 
 		delete[] P8;
 
 	}
+}
+
+void ParallelCilkBlock2MMult(double* src1, double* src2, double* dst, const int src1h, const int src1w, const int src2w, const int bs){
+	int blockSize = bs;
+	int blockCount1h = ceil((double)src1h / blockSize);
+	int blockCount1w = ceil((double)src1w / blockSize);
+	int blockCount2w = ceil((double)src2w / blockSize);
+
+	double *tB = new double[src2w * src1w];
+	ParallelCilkTranspose(src2, tB, src1w, src2w);
+
+	{
+		cilk_for(int i = 0; i < src1h; i++){
+			for (int j = 0; j < src2w; j++){
+				dst[i * src2w + j] = 0;
+			}
+		}
+	}
+
+	cilk_for (int ib = 0; ib < blockCount1h; ib++){
+		for (int jb = 0; jb < blockCount2w; jb++){
+			for (int kb = 0; kb < blockCount1w; kb++){
+				int endi = min(((ib + 1) * blockSize), src1h);
+				int endj = min(((jb + 1) * blockSize), src2w);
+				int endk = min(((kb + 1) * blockSize), src1w);
+				cilk_for (int i = (ib * blockSize); i < endi; i++){
+					for (int j = (jb * blockSize); j < endj; j++){
+						double *vec1, *vec2;
+						int k = kb * blockSize;
+						vec1 = &(src1[i * src1w + k]);
+						vec2 = &(tB[j * src1w + k]);
+						dst[i * src2w + j] += SclMlt(vec1, vec2, endk - k);
+					}
+				}
+			}
+		}
+	}
+
+	delete[] tB;
 }
 
 void ParallelCilkHolec(double* A, int n){
