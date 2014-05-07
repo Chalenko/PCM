@@ -3,7 +3,7 @@
 
 #include "stdafx.h"
 #include "ConsecCode.h"
-//#include "OpenMPCode.h"
+#include "OpenMPCode.h"
 #include "CilkCode.h"
 
 #define DELTA (0.001)
@@ -142,17 +142,14 @@ int main(int argc, char* argv[])
     printf("Execution of consec block 3 mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	ParallelCilkTranspose(A, B, n, n);
+	//ParallelOMPMMult(A, B, C, n, n, n);
     f = omp_get_wtime();
-    printf("Execution time of transpose cilk: %lf\n", f-s);
-	ParallelCilkTranspose(B, C, n, n);
-	rez=CompareMatrix(A, C, n*n, DELTA);
-	printf("Compare: %i\n",rez);
+    printf("Execution time of parallel omp: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	//ParallelCilkMMult(A, B, gC, n, n, n);
+	//ParallelCilkMMult(A, B, C, n, n, n);
     f = omp_get_wtime();
-    printf("Execution time of parallel cilk: %lf\n", f-s);
+    printf("Execution time of parallel omp: %lf\n", f-s);
 
 	s = omp_get_wtime();
 	//ParallelCilkBlock1MMult(A, B, gC, n, n, n, 1000);
