@@ -11,7 +11,7 @@
  </rdmgr>
  <All_Configurations-All_Platforms>
   <analysis_type_settings>
-   <selected_analysis_type_path>C:\Program Files (x86)\Intel\VTune Amplifier XE 2013\config\analysis_type\concurrency.cfg</selected_analysis_type_path>
+   <selected_analysis_type_path>C:\Program Files\Intel\VTune Amplifier XE 2013\config\analysis_type\concurrency.cfg</selected_analysis_type_path>
   </analysis_type_settings>
  </All_Configurations-All_Platforms>
  <engine>

@@ -42,8 +42,6 @@ void ParallelOMPTranspose(const double* src, double* dst, const int wN, const in
 
 double ParallelOMPSclMlt(const double* A, const double* B, const int len){
 	double result = 0;
-	# pragma ivdep
-	# pragma simd
 	for(int k = 0; k < len; k++){
 		result += A[k]*B[k];
 	}
@@ -53,14 +51,13 @@ double ParallelOMPSclMlt(const double* A, const double* B, const int len){
 void ParallelOMPMMult(double* src1, double* src2, double* dst, const int src1h, const int src1w, const int src2w){
 	double* tr = new double [src1w * src2w];
 	ParallelOMPTranspose(src2, tr, src1w, src2w);
-	int i, j, k;
+	int i, j;
 	//double sum = 0;
 	//omp_set_nested(true);
-	#pragma omp parallel for shared(src1, tr, dst, src1h, src1w, src2w) private(i, j, k) schedule(dynamic) //reduction(+:sum)
+	#pragma omp parallel for shared(src1, tr, dst, src1h, src1w, src2w) private(i, j) schedule(dynamic)
 	for (i = 0; i < src1h; i++){
-		//#pragma omp parallel for shared(src1, src2, dst, src1h, src1w, src2w) private(j, k, sum) schedule(dynamic) //reduction(+:sum)
-		//# pragma ivdep
-		# pragma simd
+		//#pragma omp parallel for shared(src1, src2, dst, src1h, src1w, src2w) private(j, k, sum) schedule(dynamic)
+		//# pragma simd
 		for (j = 0; j < src2w; j++){
 			double *vec1, *vec2;
 			vec1 = &(src1[i*src1w]);

@@ -115,6 +115,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="2"
 				EnableIntrinsicFunctions="true"
+				AdditionalIncludeDirectories=".\tbb42_20140416oss\include"
 				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
 				RuntimeLibrary="2"
 				EnableFunctionLevelLinking="true"
@@ -135,6 +136,7 @@
 			<Tool
 				Name="VCLinkerTool"
 				LinkIncremental="1"
+				AdditionalLibraryDirectories=".\tbb42_20140416oss\lib\ia32\vc9"
 				GenerateDebugInformation="true"
 				SubSystem="1"
 				OptimizeReferences="2"
@@ -208,6 +210,10 @@
 					/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath=".\TBBCode.cpp"
+				>
+			</File>
 		</Filter>
 		<Filter
 			Name="Заголовочные файлы"
@@ -232,6 +238,10 @@
 			</File>
 			<File
 				RelativePath=".\targetver.h"
+				>
+			</File>
+			<File
+				RelativePath=".\TBBCode.h"
 				>
 			</File>
 		</Filter>
