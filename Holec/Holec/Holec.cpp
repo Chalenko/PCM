@@ -1,4 +1,4 @@
-// Holec.cpp: определяет точку входа для консольного приложения.
+// Holec.cpp: пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ.
 //
 
 #include "stdafx.h"
@@ -103,21 +103,14 @@ int main(int argc, char* argv[])
 
 	/*
 	for (int bs = 20; bs < 520; bs+=20){
-		double *C=new double[n*n]; 
-		double *gC=new double[n*n]; 
+		double *C=new double[n*n];
 
 		double s2 = omp_get_wtime();
 		ConsecBlock2MMult(A, B, C, n, n, n, bs);
 		double f2 = omp_get_wtime();
 		
-		double s3 = omp_get_wtime();
-		ConsecBlock3MMult(A, B, gC, n, n, n, bs);
-		double f3 = omp_get_wtime();
-		
-		//rez=CompareMatrix(gC, C, n*n, DELTA);
-		cout<<bs<<"    "<<(f2 - s2)<<"    "<<(f3 - s3)<<"    "<<rez<<endl;
+		cout<<bs<<"    "<<(f2 - s2)<<endl;
 		delete[] C;
-		delete[] gC;
 	}
 	*/
 
