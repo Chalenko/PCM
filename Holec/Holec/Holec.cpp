@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "ConsecCode.h"
 #include "OpenMPCode.h"
-#include "CilkCode.h"
+//#include "CilkCode.h"
 #include "TBBCode.h"
 
 #define DELTA (0.001)
@@ -83,9 +83,9 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-	n = atoi(argv[1]);
+	//n = atoi(argv[1]);
 	seed = atoi(argv[2]);  
-	//n = 100;
+	n = 200;
 
 	srand(seed);
 
@@ -121,8 +121,6 @@ int main(int argc, char* argv[])
 	}
 	*/
 
-	task_scheduler_init init;
-
     s = omp_get_wtime();
 	//ConsecMMult(A, B, C, n, n, n);
     f = omp_get_wtime();
@@ -145,7 +143,7 @@ int main(int argc, char* argv[])
     printf("Execution time of parallel omp block 1 mlt: %lf\n", f-s);
 
 	s = omp_get_wtime();
-	//ParallelOMPBlock2MMult(A, B, C, n, n, n);
+	ParallelOMPBlock2MMult(A, B, C, n, n, n);
     f = omp_get_wtime();
     printf("Execution time of parallel omp block 2 mlt: %lf\n", f-s);
 
@@ -158,6 +156,21 @@ int main(int argc, char* argv[])
 	//ParallelCilkBlock2MMult(A, B, gC, n, n, n);
     f = omp_get_wtime();
     printf("Execution time of parallel cilk block 2 mlt: %lf\n", f-s);
+
+	s = omp_get_wtime();
+	//ParallelTBBMMult(A, B, C, n, n, n);
+    f = omp_get_wtime();
+    printf("Execution time of parallel tbb mlt: %lf\n", f-s);
+
+	s = omp_get_wtime();
+	//ParallelTBBBlock1MMult(A, B, gC, n, n, n);
+    f = omp_get_wtime();
+    printf("Execution time of parallel tbb block 1 mlt: %lf\n", f-s);
+
+	s = omp_get_wtime();
+	ParallelTBBBlock2MMult(A, B, gC, n, n, n);
+    f = omp_get_wtime();
+    printf("Execution time of parallel tbb block 2 mlt: %lf\n", f-s);
 
 	rez=CompareMatrix(gC, C, n*n, DELTA);
 	printf("Compare: %i\n",rez);

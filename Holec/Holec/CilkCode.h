@@ -2,6 +2,8 @@
 #include <cilk\reducer_opadd.h>
 
 void ParallelCilkTranspose(const double* src, double* dst, const int w, const int h);
+double ParallelCilkSum(const double* src, const int len);
+double ParallelCilkSclMlt(const double* A, const double* B, const int len);
 void ParallelCilkMMult(double* src1, double* src2, double* dst, const int src1h, const int src1w, const int src2w);
 void ParallelCilk2MMult(double* src1, double* src2, double* dst, const int src1h, const int src1w, const int src2w);
 void ParallelCilk3MMult(double* src1, double* src2, double* dst, const int src1h, const int src1w, const int src2w);

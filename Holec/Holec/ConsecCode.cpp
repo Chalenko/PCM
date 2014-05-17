@@ -14,20 +14,16 @@ void PrintMat(double *A, int w, int h)
 void ConsecAdd(const double *A, const double *B, double *dst, const int w, const int h)
 {
 	int i, j;
-	for(i = 0; i < h; i++){
-		for(j = 0; j < w; j++){
-			dst[i * w + j] = A[i * w + j] + B[i * w + j];
-		}
+	for(i = 0; i < (h * w); i++){
+		dst[i] = A[i] + B[i];
 	}
 }
 
 void ConsecAddEq(const double *A, double *dst, const int w, const int h)
 {
 	int i, j;
-	for(i = 0; i < h; i++){
-		for(j = 0; j < w; j++){
-			dst[i * w + j] = dst[i * w + j] + A[i * w + j];
-		}
+	for(i = 0; i < (h * w); i++){
+		dst[i] = dst[i] + A[i];
 	}
 }
 

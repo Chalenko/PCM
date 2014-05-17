@@ -3,27 +3,23 @@
 
 void ParallelOMPAdd(const double *A, const double *B, double *dst, const int w, const int h)
 {
-	int i, j;
-	# pragma omp parallel for private (j, i) schedule (dynamic)
-	for(i = 0; i < h; i++){
-		# pragma ivdep
-		# pragma simd
-		for(j = 0; j < w; j++){
-			dst[i * w + j] = A[i * w + j] + B[i * w + j];
-		}
+	int i;
+	# pragma ivdep
+	# pragma simd
+	# pragma omp parallel for private (i) schedule (dynamic)
+	for(i = 0; i < (h * w); i++){
+		dst[i] = A[i] + B[i];
 	}
 }
 
 void ParallelOMPAddEq(const double *A, double *dst, const int w, const int h)
 {
-	int i, j;
-	# pragma omp parallel for private (j, i) schedule (dynamic)
-	for(i = 0; i < h; i++){
-		# pragma ivdep
-		# pragma simd
-		for(j = 0; j < w; j++){
-			dst[i * w + j] = dst[i * w + j] + A[i * w + j];
-		}
+	int i;
+	# pragma ivdep
+	# pragma simd
+	# pragma omp parallel for private (i) schedule (dynamic)
+	for(i = 0; i < (h * w); i++){
+		dst[i] = dst[i] + A[i];
 	}
 }
 
@@ -40,7 +36,7 @@ void ParallelOMPTranspose(const double* src, double* dst, const int wN, const in
 	}
 }
 
-double ParallelOMPSclMlt(const double* A, const double* B, const int len){
+double OMPSclMlt(const double* A, const double* B, const int len){
 	double result = 0;
 	for(int k = 0; k < len; k++){
 		result += A[k]*B[k];
@@ -62,7 +58,7 @@ void ParallelOMPMMult(double* src1, double* src2, double* dst, const int src1h, 
 			double *vec1, *vec2;
 			vec1 = &(src1[i*src1w]);
 			vec2 = &(tr[j*src1w]);
-			dst[i*src2w + j] = ParallelOMPSclMlt(vec1, vec2, src1w);
+			dst[i*src2w + j] = OMPSclMlt(vec1, vec2, src1w);
 		}
 	}
 	delete [] tr;
@@ -276,7 +272,7 @@ void ParallelOMPBlock2MMult(double* src1, double* src2, double* dst, const int s
 						int k = kb * blockSize;
 						vec1 = &(src1[i * src1w + k]);
 						vec2 = &(tB[j * src1w + k]);
-						dst[i * src2w + j] += ParallelOMPSclMlt(vec1, vec2, endk - k);
+						dst[i * src2w + j] += OMPSclMlt(vec1, vec2, endk - k);
 					}
 				}
 			}
