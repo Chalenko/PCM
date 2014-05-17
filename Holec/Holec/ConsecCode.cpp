@@ -36,6 +36,41 @@ void ConsecTranspose(const double* src, double* dst, const int wN, const int hN)
 	}
 }
 
+void ConsecSolve1(const double *A, double *X, const double *B, const int h, const int w){
+	double *tX = new double[h * w];
+	ConsecTranspose(X, tX, h, w);
+
+	double *tB = new double[h * w];
+	ConsecTranspose(B, tB, h, w);
+
+	for(int j = 0; j < w; j++){
+		for(int i = 0; i < h; i++){
+			double sum = 0;
+			for (int k = 0; k < i; k++){
+				sum += A[i * h + k] * tX[j * h + k];
+			}
+			tX[j * h + i] = (tB[j * h + i] - sum)/A[i * h + i];
+		}
+	}
+
+	ConsecTranspose(tX, X, w, h);
+}
+
+void ConsecSolve2(const double *A, double *X, const double *B, const int h, const int w){
+	for(int i = 0; i < h; i++){
+		for(int j = 0; j < w; j++){
+			double sum = 0;
+			for (int k = 0; k < i; k++){
+				sum += A[i * h + k] * X[k * w + j];
+			}
+			X[i * w + j] = (B[i * w + j] - sum)/A[i * h + i];
+		}
+	}
+
+	//PrintMat(X, w, h);
+}
+
+
 double ConsecSclMlt(const double* A, const double* B, const int len){
 	double result = 0;
 	for(int k = 0; k < len; k++){
